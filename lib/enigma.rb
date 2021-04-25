@@ -13,7 +13,20 @@ ALPHABET = ("a".."z").to_a << " "
     shift = combined_shift.map do |shift|
       shift.sum
     end
-    require "pry"; binding.pry
+    x = message.chars.map {|c| ALPHABET.index(c)}
+    y = x.zip(shift.cycle(4)).map(&:sum)
+    z = y.map {|c| ALPHABET[c % 27]} 
+    a = z.join("")
+
+    encrypt = {}
+    encrypt["encryption".to_sym] = a
+    encrypt["key".to_sym] = key
+    encrypt["date".to_sym] = date
+    encrypt
+  end
+
+  def decrypt(code, key, date)
+    
   end
 
   def last_4_of_date(date)
