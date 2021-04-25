@@ -9,7 +9,7 @@ RSpec.describe Enigma do
     expect(enigma).to be_instance_of(Enigma)
   end
 
-  it 'can encrypt a message' do
+  it 'can encrypt a message with a key and date' do
     enigma = Enigma.new
 
     expected = {
@@ -21,7 +21,7 @@ RSpec.describe Enigma do
     expect(enigma.encrypt("hello world", "02715", "040895")).to eq(expected)
   end
 
-  it 'can decrypt a message' do
+  it 'can decrypt a message with a key and date' do
     enigma = Enigma.new
 
     expected = {
