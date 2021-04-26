@@ -5,7 +5,7 @@ class Enigma
 ALPHABET = ("a".."z").to_a << " "
 
   attr_accessor :key_encrypt_arrays,
-              :key_decrypt_arrays
+                :key_decrypt_arrays
   def initialize
       @key_encrypt_arrays = []
       @key_decrypt_arrays = []
@@ -70,7 +70,7 @@ ALPHABET = ("a".."z").to_a << " "
 
   def key_encrypt_values(key)
     if key == false
-      key = rand(10000..99999).to_s
+      key = rand(1..99999).to_s.rjust(5, "0")
       key.chars.each_cons(2) do |number_set|
       @key_encrypt_arrays << number_set.join.to_i
     end
