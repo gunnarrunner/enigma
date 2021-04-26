@@ -22,14 +22,31 @@ ALPHABET = ("a".."z").to_a << " "
     end
 
     indexed_message = message.downcase.chars.map do |c|
-      ALPHABET.index(c)
+      if ALPHABET.index(c) == nil
+        c
+      else
+        ALPHABET.index(c)
+      end
     end
     
-    shifted_message_index = indexed_message.zip(shift.cycle(4)).map(&:sum)
+    shifted_message_index_not_summed = indexed_message.zip(shift.cycle(4))
+    
+    shifted_message_index = shifted_message_index_not_summed.map do |index|
+      if index[0].instance_of?(String)
+        index[0]
+      else
+        index.sum
+      end
+    end
 
     seperated_encrypted_message = shifted_message_index.map do |c|
-      ALPHABET[c % 27]
+      if c.instance_of?(String)
+        c
+      else
+        ALPHABET[c % 27]
+      end
     end
+
 
     encrypted_message = seperated_encrypted_message.join("")
 
@@ -55,13 +72,29 @@ ALPHABET = ("a".."z").to_a << " "
     end
 
     indexed_message = code.chars.map do |c|
-      ALPHABET.index(c)
+      if ALPHABET.index(c) == nil
+        c
+      else
+        ALPHABET.index(c)
+      end
     end
 
-    shifted_message_index = indexed_message.zip(negative_shift.cycle(4)).map(&:sum)
+    shifted_message_index_not_summed = indexed_message.zip(negative_shift.cycle(4))
+    
+    shifted_message_index = shifted_message_index_not_summed.map do |index|
+      if index[0].instance_of?(String)
+        index[0]
+      else
+        index.sum
+      end
+    end
 
     seperated_encrypted_message = shifted_message_index.map do |c|
-      ALPHABET[c % 27]
+      if c.instance_of?(String)
+        c
+      else
+        ALPHABET[c % 27]
+      end
     end
 
     encrypted_message = seperated_encrypted_message.join("")
