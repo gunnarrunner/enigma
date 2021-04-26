@@ -18,7 +18,7 @@ ALPHABET = ("a".."z").to_a << " "
     shift = combined_shift.map do |shift|
       shift.sum
     end
-    x = message.chars.map {|c| ALPHABET.index(c)}
+    x = message.downcase.chars.map {|c| ALPHABET.index(c)}
     y = x.zip(shift.cycle(4)).map(&:sum)
     z = y.map {|c| ALPHABET[c % 27]} 
     a = z.join("")
@@ -72,11 +72,11 @@ ALPHABET = ("a".."z").to_a << " "
     if key == false
       key = rand(10000..99999).to_s
       key.chars.each_cons(2) do |number_set|
-      @key_encrypt_arrays <<  number_set.join.to_i
+      @key_encrypt_arrays << number_set.join.to_i
     end
     else
       key.chars.each_cons(2) do |number_set|
-      @key_encrypt_arrays <<  number_set.join.to_i
+      @key_encrypt_arrays << number_set.join.to_i
       end
     end
   end
@@ -85,11 +85,11 @@ ALPHABET = ("a".."z").to_a << " "
     if key == false
       key = rand(10000..99999).to_s
       key.chars.each_cons(2) do |number_set|
-        @key_decrypt_arrays <<  number_set.join.to_i
+        @key_decrypt_arrays << number_set.join.to_i
       end
     else
       key.chars.each_cons(2) do |number_set|
-        @key_decrypt_arrays <<  number_set.join.to_i
+        @key_decrypt_arrays << number_set.join.to_i
       end
     end
   end

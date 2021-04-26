@@ -69,8 +69,6 @@ RSpec.describe Enigma do
                 date: false
                 }
 
-      # Enigma.any_instance.stub(:key_encrypt_values).and_return([1,2,3,4])
-      # Enigma.any_instance.stub(:key_encrypt_arrays).and_return([5,6,7,8])
       enigma.key_encrypt_arrays = [5,6,7,8]
       
       expect(enigma.encrypt("hello")).to eq(expected)
