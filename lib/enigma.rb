@@ -14,17 +14,27 @@ ALPHABET = ("a".."z").to_a << " "
   def encrypt(message, key = false, date = false)
     last_4_of_date(date)
     key_encrypt_values(key)
+
     combined_shift = last_4_of_date(date).zip(@key_encrypt_arrays)
+
     shift = combined_shift.map do |shift|
       shift.sum
     end
-    x = message.downcase.chars.map {|c| ALPHABET.index(c)}
-    y = x.zip(shift.cycle(4)).map(&:sum)
-    z = y.map {|c| ALPHABET[c % 27]} 
-    a = z.join("")
+
+    indexed_message = message.downcase.chars.map do |c|
+      ALPHABET.index(c)
+    end
+    
+    shifted_message_index = indexed_message.zip(shift.cycle(4)).map(&:sum)
+
+    seperated_encrypted_message = shifted_message_index.map do |c|
+      ALPHABET[c % 27]
+    end
+
+    encrypted_message = seperated_encrypted_message.join("")
 
     encrypt = {}
-    encrypt["encryption".to_sym] = a
+    encrypt["encryption".to_sym] = encrypted_message
     encrypt["key".to_sym] = key
     encrypt["date".to_sym] = date
     encrypt
@@ -33,18 +43,31 @@ ALPHABET = ("a".."z").to_a << " "
   def decrypt(code, key = false, date = false)
     last_4_of_date(date)
     key_decrypt_values(key)
+    
     combined_shift = last_4_of_date(date).zip(@key_decrypt_arrays)
+
     shift = combined_shift.map do |shift|
       shift.sum
     end
-    negative_shift = shift.map {|shift| shift * -1}
-    x = code.chars.map {|c| ALPHABET.index(c)}
-    y = x.zip(negative_shift.cycle(4)).map(&:sum)
-    z = y.map {|c| ALPHABET[c % 27]} 
-    a = z.join("")
+
+    negative_shift = shift.map do |shift| 
+      shift * -1
+    end
+
+    indexed_message = code.chars.map do |c|
+      ALPHABET.index(c)
+    end
+
+    shifted_message_index = indexed_message.zip(negative_shift.cycle(4)).map(&:sum)
+
+    seperated_encrypted_message = shifted_message_index.map do |c|
+      ALPHABET[c % 27]
+    end
+
+    encrypted_message = seperated_encrypted_message.join("")
 
     encrypt = {}
-    encrypt["decryption".to_sym] = a
+    encrypt["decryption".to_sym] = encrypted_message
     encrypt["key".to_sym] = key
     encrypt["date".to_sym] = date
     encrypt
@@ -83,7 +106,7 @@ ALPHABET = ("a".."z").to_a << " "
 
   def key_decrypt_values(key)
     if key == false
-      key = rand(10000..99999).to_s
+      key = rand(1..99999).to_s.rjust(5, "0")
       key.chars.each_cons(2) do |number_set|
         @key_decrypt_arrays << number_set.join.to_i
       end

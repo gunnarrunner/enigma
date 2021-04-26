@@ -18,7 +18,7 @@ RSpec.describe Enigma do
                 date: "040895"
                 }
 
-    expect(enigma.encrypt("hello world", "02715", "040895")).to eq(expected)
+    expect(enigma.encrypt("Hello World", "02715", "040895")).to eq(expected)
   end
 
   it 'can decrypt a message with a key and date' do
