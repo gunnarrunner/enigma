@@ -29,7 +29,7 @@ ALPHABET = ("a".."z").to_a << " "
       end
     end
     
-    shifted_message_index_not_summed = indexed_message.zip(shift.cycle(4))
+    shifted_message_index_not_summed = indexed_message.zip(shift.cycle)
     
     shifted_message_index = shifted_message_index_not_summed.map do |index|
       if index[0].instance_of?(String)
@@ -79,7 +79,7 @@ ALPHABET = ("a".."z").to_a << " "
       end
     end
 
-    shifted_message_index_not_summed = indexed_message.zip(negative_shift.cycle(4))
+    shifted_message_index_not_summed = indexed_message.zip(negative_shift.cycle)
     
     shifted_message_index = shifted_message_index_not_summed.map do |index|
       if index[0].instance_of?(String)
