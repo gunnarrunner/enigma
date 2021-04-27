@@ -1,6 +1,5 @@
 require 'date'
 
-
 class Enigma
 ALPHABET = ("a".."z").to_a << " "
 
@@ -10,99 +9,10 @@ ALPHABET = ("a".."z").to_a << " "
   end
 
   def encrypt(message, key = default_key, date = default_date)
-    # last_4_of_date(date)
-    # key_values(key)
-
-    # combined_shift = last_4_of_date(date).zip(@keys_array)
-
-    # shift = combined_shift.map do |shift|
-    #   shift.sum
-    # end
-
-    # indexed_message = message.downcase.chars.map do |message_letter|
-    #   if ALPHABET.index(message_letter) == nil
-    #     message_letter
-    #   else
-    #     ALPHABET.index(message_letter)
-    #   end
-    # end
-    
-    # shifted_message_index_not_summed = indexed_message.zip(shift.cycle)
-    
-    # shifted_message_index = shifted_message_index_not_summed.map do |index|
-    #   if index[0].instance_of?(String)
-    #     index[0]
-    #   else
-    #     index.sum
-    #   end
-    # end
-
-    # seperated_encrypted_message = shifted_message_index.map do |new_index_number|
-    #   if new_index_number.instance_of?(String)
-    #     new_index_number
-    #   else
-    #     ALPHABET[new_index_number % 27]
-    #   end
-    # end
-
-
-    # encrypted_message = seperated_encrypted_message.join("")
-
-    # encrypt = {}
-    # encrypt["encryption".to_sym] = encrypted_message
-    # encrypt["key".to_sym] = key
-    # encrypt["date".to_sym] = date
-    # encrypt
     crypt(message, key, date, "encrypt")
   end
 
   def decrypt(code, key = default_key, date = default_date)
-    # last_4_of_date(date)
-    # key_values(key)
-    
-    # combined_shift = last_4_of_date(date).zip(@keys_array)
-
-    # shift = combined_shift.map do |shift|
-    #   shift.sum
-    # end
-
-    # negative_shift = shift.map do |shift| 
-    #   shift * -1
-    # end
-
-    # indexed_message = code.chars.map do |encrypt_letter|
-    #   if ALPHABET.index(encrypt_letter) == nil
-    #     encrypt_letter
-    #   else
-    #     ALPHABET.index(encrypt_letter)
-    #   end
-    # end
-
-    # shifted_message_index_not_summed = indexed_message.zip(negative_shift.cycle)
-    
-    # shifted_message_index = shifted_message_index_not_summed.map do |index|
-    #   if index[0].instance_of?(String)
-    #     index[0]
-    #   else
-    #     index.sum
-    #   end
-    # end
-
-    # seperated_encrypted_message = shifted_message_index.map do |new_index_number|
-    #   if new_index_number.instance_of?(String)
-    #     new_index_number
-    #   else
-    #     ALPHABET[new_index_number % 27]
-    #   end
-    # end
-
-    # encrypted_message = seperated_encrypted_message.join("")
-
-    # encrypt = {}
-    # encrypt["decryption".to_sym] = encrypted_message
-    # encrypt["key".to_sym] = key
-    # encrypt["date".to_sym] = date
-    # encrypt
     crypt(code, key, date, "decrypt")
   end
 
@@ -112,9 +22,7 @@ ALPHABET = ("a".."z").to_a << " "
     
     combined_shift = last_4_of_date(date).zip(@keys_array)
 
-    shift = combined_shift.map do |shift|
-      shift.sum
-    end
+    shift = combined_shift.map(&:sum) 
 
     if type == "decrypt"
       shift = shift.map do |shift| 
@@ -122,46 +30,58 @@ ALPHABET = ("a".."z").to_a << " "
       end
     end
 
-    indexed_message = code.downcase.chars.map do |encrypt_letter|
-      if ALPHABET.index(encrypt_letter) == nil
-        encrypt_letter
-      else
-        ALPHABET.index(encrypt_letter)
-      end
-    end
+    indexed_message = downcase_and_index_message(code)
 
     shifted_message_index_not_summed = indexed_message.zip(shift.cycle)
     
-    shifted_message_index = shifted_message_index_not_summed.map do |index|
-      if index[0].instance_of?(String)
-        index[0]
-      else
-        index.sum
-      end
-    end
+    shifted_message_index = not_summed_shift_message(shifted_message_index_not_summed)
 
-    seperated_encrypted_message = shifted_message_index.map do |new_index_number|
+    seperated_encrypted_message = shift_message_index(shifted_message_index)
+
+    message = seperated_encrypted_message.join("")
+
+    if type == "encrypt"
+      encrypt = {}
+      encrypt[:encryption] = message
+      encrypt[:key] = key
+      encrypt[:date] = date
+      encrypt
+    elsif type == "decrypt"
+      decrypt = {}
+      decrypt[:decryption] = message
+      decrypt[:key] = key
+      decrypt[:date] = date
+      decrypt
+    end
+  end
+
+  def shift_message_index(shift_index)
+    shift_index.map do |new_index_number|
       if new_index_number.instance_of?(String)
         new_index_number
       else
         ALPHABET[new_index_number % 27]
       end
     end
+  end
 
-    encrypted_message = seperated_encrypted_message.join("")
+  def not_summed_shift_message(zipped_message)
+    zipped_message.map do |index|
+      if index[0].instance_of?(String)
+        index[0]
+      else
+        index.sum
+      end
+    end
+  end
 
-    if type == "encrypt"
-      encrypt = {}
-      encrypt["encryption".to_sym] = encrypted_message
-      encrypt["key".to_sym] = key
-      encrypt["date".to_sym] = date
-      encrypt
-    elsif
-      decrypt = {}
-      decrypt["decryption".to_sym] = encrypted_message
-      decrypt["key".to_sym] = key
-      decrypt["date".to_sym] = date
-      decrypt
+  def downcase_and_index_message(code)
+    code.downcase.chars.map do |encrypt_letter|
+      if ALPHABET.index(encrypt_letter) == nil
+        encrypt_letter
+      else
+        ALPHABET.index(encrypt_letter)
+      end
     end
   end
 
