@@ -18,7 +18,7 @@ RSpec.describe Enigma do
                 date: "040895"
                 }
 
-    expect(enigma.encrypt("Hello World", "02715", "040895")).to eq(expected)
+    expect(enigma.encrypt("HelLo WoRld", "02715", "040895")).to eq(expected)
   end
 
   it 'can decrypt a message with a key and date' do
@@ -39,7 +39,7 @@ RSpec.describe Enigma do
     expected = {
                 encryption: "qgfax",
                 key: "02715",
-                date: false
+                date: "260421"
                 }
 
     expect(enigma.encrypt("hello", "02715")).to eq(expected)
@@ -51,7 +51,7 @@ RSpec.describe Enigma do
     expected = {
                 decryption: "hello",
                 key: "02715",
-                date: false
+                date: "260421"
                 }
 
     expect(enigma.decrypt("qgfax", "02715")).to eq(expected)
@@ -60,13 +60,14 @@ RSpec.describe Enigma do
   it 'can encrypt a message without a key and a date' do
     Enigma.any_instance.stub(:key_encrypt_values).and_return([1,2,3,4])
     Enigma.any_instance.stub(:key_encrypt_arrays).and_return([5,6,7,8])
+    Enigma.any_instance.stub(:default_key).and_return("12345")
 
     enigma = Enigma.new
 
     expected = {
                 encryption: "tmwu " ,
-                key: false,
-                date: false
+                key: "12345",
+                date: "260421"
                 }
 
       enigma.key_encrypt_arrays = [5,6,7,8]

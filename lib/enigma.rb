@@ -11,7 +11,7 @@ ALPHABET = ("a".."z").to_a << " "
       @key_decrypt_arrays = []
   end
 
-  def encrypt(message, key = false, date = false)
+  def encrypt(message, key = default_key, date = default_date)
     last_4_of_date(date)
     key_encrypt_values(key)
 
@@ -57,7 +57,7 @@ ALPHABET = ("a".."z").to_a << " "
     encrypt
   end
 
-  def decrypt(code, key = false, date = false)
+  def decrypt(code, key = default_key, date = default_date)
     last_4_of_date(date)
     key_decrypt_values(key)
     
@@ -106,47 +106,32 @@ ALPHABET = ("a".."z").to_a << " "
     encrypt
   end
 
+  def default_date
+    date_now = Time.now
+    date = date_now.strftime("%d%m%y")
+  end
+
+  def default_key
+    key = rand(1..99999).to_s.rjust(5, "0")
+  end
+
   def last_4_of_date(date)
-    if date == false
-      date_now = Time.now
-      date = date_now.strftime("%d%m%y")
-      squared = date.to_i**2
-      last_4_string = squared.to_s.chars.last(4)
-      last_4_string.map do |integer|
-        integer.to_i
-      end
-    else
-      squared = date.to_i**2
-      last_4_string = squared.to_s.chars.last(4)
-      last_4_string.map do |integer|
-        integer.to_i
-      end
+    squared = date.to_i**2
+    last_4_string = squared.to_s.chars.last(4)
+    last_4_string.map do |integer|
+      integer.to_i
     end
   end
 
   def key_encrypt_values(key)
-    if key == false
-      key = rand(1..99999).to_s.rjust(5, "0")
-      key.chars.each_cons(2) do |number_set|
-      @key_encrypt_arrays << number_set.join.to_i
-    end
-    else
-      key.chars.each_cons(2) do |number_set|
-      @key_encrypt_arrays << number_set.join.to_i
-      end
+    key.chars.each_cons(2) do |number_set|
+    @key_encrypt_arrays << number_set.join.to_i
     end
   end
 
   def key_decrypt_values(key)
-    if key == false
-      key = rand(1..99999).to_s.rjust(5, "0")
-      key.chars.each_cons(2) do |number_set|
-        @key_decrypt_arrays << number_set.join.to_i
-      end
-    else
-      key.chars.each_cons(2) do |number_set|
-        @key_decrypt_arrays << number_set.join.to_i
-      end
+    key.chars.each_cons(2) do |number_set|
+      @key_decrypt_arrays << number_set.join.to_i
     end
   end
 end
